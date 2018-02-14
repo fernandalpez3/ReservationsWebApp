@@ -15,6 +15,7 @@ $(document).ready(function(){
     //create firebase references
     var Auth = firebase.auth(); 
     var dbRef = firebase.database();
+    var rootRef = dbRef.ref();
     var contactsRef = dbRef.ref('contacts')
     var usersRef = dbRef.ref('users')
     var restaurantRef = dbRef.ref('restaurants')
@@ -176,7 +177,7 @@ $(document).ready(function(){
               $('.unauthenticated, .userAuth').toggleClass('unauthenticated').toggleClass('authenticated');
               contactsRef.child(auth.uid)
                 .on("child_added", function(snap) {
-                  console.log("added", snap.key(), snap.val());
+                  //console.log("added", snap.key(), snap.val());
                   $('#contacts').append(contactHtmlFromObject(snap.val()));
                 });
             })
@@ -230,6 +231,18 @@ $(document).ready(function(){
           //inform user to login
         }
       });
+
+      //pull restaurants
+      $('#seeRestaurants').on("click", function( event ){
+        event.preventDefault();
+        rootRef.once("value").then(function(snapshot) {
+          snapshot.child("restaurants").forEach(function(val){
+            $('#restaurant_list').append('<div id="restaurant_list"><div class="col-lg-3 col-md-3 col-xs-6 card"><a href="#" class="d-block mb-4 h-100"><img class="img-fluid img-thumbnail" src="' + val.child("image").val() + '" alt=""><h4>' + val.child("name").val() + '</h4></a> </div></div>');
+          });
+    
+        });
+      });
+
   })
 
 
