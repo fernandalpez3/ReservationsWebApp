@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reservations</title>
+  <base href="/">
+
+  <!-- Sripts -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- style -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
+  <!-- <link rel="stylesheet" type="text/css" href="list.css"></link> -->
+
+  <style type="text/css">
+  #contacts p, #contacts p.lead{ margin: 0; }
+  .authenticated{ display: block;margin-top: 20px;margin-bottom: 10px;}
+  .unauthenticated{display: none;}
+  .modal-header:last-child{border-bottom: 0;}
+  </style>
+
+
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+
+</head>
+
+
+
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Reservations Web App</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#">{{Username}}</a></li>
+        <li><a href="#">Sign Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="cards">
+    <div id="restaurant_list">
+      <div class="col-lg-3 col-md-3 col-xs-6 card">
+        <a href="#" class="d-block mb-4 h-100">
+          <img class="img-fluid img-thumbnail" src="http://www.dogbreedslist.info/uploads/allimg/dog-pictures/Beagle-1.jpg" alt="">
+          <h4>Perrito</h4>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Reservation Web App</h5>
+          <p class="grey-text text-lighten-4">Developed by Fernanda Lopez,
+            Rudy Lepe, Eduardo Merino and Gilberto Rogel.</p>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Links</h5>
+            <ul>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          © 2018 Copyright
+        </div>
+      </div>
+    </footer>
+  </body>
+
+
+
+  <script>
+  $(document).ready(() => {
+    console.log("firebase");
+    // Set the configuration for your app
+    // TODO: Replace with your project's config object
+    var config = {
+      apiKey: "AIzaSyCZKKTulhgDz_t4p_2QDA_QJ-3jHVJzmHI",
+      authDomain: "reservations-2b9f1.firebaseapp.com",
+      databaseURL: "https://reservations-2b9f1.firebaseio.com",
+      projectId: "reservations-2b9f1",
+      storageBucket: "reservations-2b9f1.appspot.com",
+      messagingSenderId: "852642616641"
+    };
+    firebase.initializeApp(config);
+
+    // Get a reference to the database service
+    var database = firebase.database();
+
+    //var userId = firebase.auth().currentUser.uid;
+    //return firebase.database().ref('reservations-2b9f1/restaurants/').once('value').then(function(snapshot) {
+    var rootRef = firebase.database().ref();
+    rootRef.once("value").then(function(snapshot) {
+      snapshot.child("restaurants").forEach(function(val){
+        $('#restaurant_list').append('<div id="restaurant_list"><div class="col-lg-3 col-md-3 col-xs-6 card"><a href="#" class="d-block mb-4 h-100"><img class="img-fluid img-thumbnail" src="' + val.child("image").val() + '" alt=""><h4>' + val.child("name").val() + '</h4></a> </div></div>');
+      });
+
+    });
+  });
+</script>
+
+<style>
+
+.cards{
+  padding: 2%;
+  text-align: center;
+}
+
+.nav-wrapper{
+  background-color: #33196B;
+  padding-left: 13px;
+}
+
+#restaurant_list{
+}
+
+.card{
+  background-color: lightgrey;
+  padding: 2px;
+}
+h4{
+  color: black;
+}
+body{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.page-footer{
+  background-color: #33196B;
+}
+
+</style>
+
+
+</html>
